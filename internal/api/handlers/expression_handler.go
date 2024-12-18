@@ -40,7 +40,7 @@ func CalcHandler(c *gin.Context) {
 
 	ans, err := services.Calculate(expression.(string))
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "ошибка сервера"})
 		return
 	}
 
