@@ -59,11 +59,11 @@ ___
 > Примеры неправильных запросов curl:
 > 
 > 1.`curl --location "http://localhost:8080/api/v1/calculate" --header "Content-Type: application/json" --data "{\"expression\": \"(2+2)*2\)"}"
-{"error":"Invalid JSON format"}`
+{"error":"Invalid JSON format"}` (400)
 > 
-> 2.`curl --location "http://localhost:8080/api/v1/calculate" --header "Content-Type: application/json" --data "{\"expression\": \""\}"
-{"error":"Invalid JSON format"}`
-> 
-> и другие...
-> >
+> 2.`curl --location "http://localhost:8080/api/v1/calculate" --header "Content-type: application/json" --data "{\"expression\" : \"2+2*2)\"}"
+{"error":"Incorrect brackets"}` (422)
+>
+
+> [!TI
 
