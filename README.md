@@ -56,7 +56,7 @@ curl --location "http://localhost:8080/api/v1/calculate" --header "Content-Type:
 # Примеры 
 
 
-### 1
+### Пример 1
 
 req
 ~~~
@@ -71,7 +71,7 @@ res
 }
 ~~~
 
-### 2
+### Пример 2
 
 req
 ~~~
@@ -87,7 +87,7 @@ res
 }
 ~~~
 
-### 3
+### Пример 3
 
 req
 ~~~
@@ -103,7 +103,7 @@ res
 }
 ~~~
 
-### 4
+### Пример 4
 
 req
 ~~~
