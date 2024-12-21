@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"regexp"
 	"sprint1_finalTask/internal/api/services"
+	"strings"
 )
 
 type CalculateRequest struct {
@@ -21,9 +22,23 @@ func CalcMiddleware() gin.HandlerFunc {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid JSON format"})
 			return
 		}
+
+		//у меня калькулятор не обрабатывает / 0, но да ладно
+		if strings.Contains(req.Expression, "/0") || strings.Contains(req.Expression, "/ 0") {
+			c.JSON(http.StatusUnprocessableEntity, gin.H{"error": "Dividing by zero"})
+			return
+		}
+
+		//брекеты
+		if !BracketsValidation(req.Expression) {
+			c.JSON(http.StatusUnprocessableEntity, gin.H{"error": "Incorrect brackets"})
+			return
+		}
+
+		//проверка на содержание мусора
 		valid, err := regexp.MatchString("^[0-9)(*/+-]+$", req.Expression)
 		if err != nil || !valid {
-			c.JSON(http.StatusUnprocessableEntity, gin.H{"error": "Invalid characters in expression"})
+			c.JSON(http.StatusUnprocessableEntity, gin.H{"error": "Invalid characters in expression!!!"})
 			return
 		}
 
@@ -38,6 +53,13 @@ func CalcHandler(c *gin.Context) {
 
 	expression, _ := c.Get("expression")
 
+	defer func() {
+		if err := recover(); err != nil {
+			log.Printf("panic recovered")
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal Server Error"})
+		}
+	}()
+
 	ans, err := services.Calculate(expression.(string))
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "ошибка сервера"})
@@ -45,4 +67,23 @@ func CalcHandler(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{"result": ans})
+}
+
+func BracketsValidation(exp string) bool {
+	leftcount := 0
+	rightcount := 0
+
+	for _, r := range exp {
+		if r == '(' {
+			leftcount++
+		}
+		if r == ')' {
+			rightcount++
+		}
+	}
+
+	if leftcount != rightcount {
+		return false
+	}
+	return true
 }
