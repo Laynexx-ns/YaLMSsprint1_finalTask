@@ -50,8 +50,73 @@ curl --location "http://localhost:8080/api/v1/calculate" --header "Content-Type:
 {"result":8}
 ~~~
 
-___
 
+
+
+# Примеры 
+
+
+### Пример 1
+
+req
+~~~
+{
+  "expression" : "2+3/2"
+}
+~~~
+res
+~~~
+{
+  "result": 3.5
+}
+~~~
+
+### Пример 2
+
+req
+~~~
+{
+  "expression" : "2+3/2/0"
+}
+~~~
+res
+~~~
+422
+{
+  "error": "Dividing by zero"
+}
+~~~
+
+### Пример 3
+
+req
+~~~
+{
+  "expression" : "2+(3/2"
+}
+~~~
+res
+~~~
+422
+{
+  "error": "Incorrect brackets"
+}
+~~~
+
+### Пример 4
+
+req
+~~~
+{
+  "expression" : 2+3/2"
+}
+~~~
+res
+~~~
+{
+  "error": "Invalid JSON format"
+}
+~~~
 
 
 
@@ -65,5 +130,5 @@ ___
 {"error":"Incorrect brackets"}` (422)
 >
 
-> [!TI
+
 
