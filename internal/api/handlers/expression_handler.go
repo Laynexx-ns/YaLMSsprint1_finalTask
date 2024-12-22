@@ -17,21 +17,25 @@ func CalcMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		log.Printf("Request: %s %s", c.Request.Method, c.Request.URL.Path)
 
+		//base
 		var req CalculateRequest
 		if err := c.ShouldBindJSON(&req); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid JSON format"})
+			c.Abort()
 			return
 		}
 
 		//у меня калькулятор не обрабатывает / 0, но да ладно
 		if strings.Contains(req.Expression, "/0") || strings.Contains(req.Expression, "/ 0") {
 			c.JSON(http.StatusUnprocessableEntity, gin.H{"error": "Dividing by zero"})
+			c.Abort()
 			return
 		}
 
 		//брекеты
 		if !BracketsValidation(req.Expression) {
 			c.JSON(http.StatusUnprocessableEntity, gin.H{"error": "Incorrect brackets"})
+			c.Abort()
 			return
 		}
 
@@ -39,6 +43,7 @@ func CalcMiddleware() gin.HandlerFunc {
 		valid, err := regexp.MatchString("^[0-9)(*/+-]+$", req.Expression)
 		if err != nil || !valid {
 			c.JSON(http.StatusUnprocessableEntity, gin.H{"error": "Invalid characters in expression!!!"})
+			c.Abort()
 			return
 		}
 
@@ -57,6 +62,7 @@ func CalcHandler(c *gin.Context) {
 		if err := recover(); err != nil {
 			log.Printf("panic recovered")
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal Server Error"})
+			return
 		}
 	}()
 
