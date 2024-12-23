@@ -1,5 +1,24 @@
 # YALMS Calculator (Sprint1)
 
+
+## Как запустить?
+
+#### склонируйте репозиторий:
+ssh:
+~~~
+git clone git@github.com:Laynexx-ns/gocalc_LMS24.git
+~~~
+https:
+~~~
+ git clone https://github.com/Laynexx-ns/gocalc_LMS24.git
+~~~
+
+
+#### введите эту команду 
+~~~
+go run .\cmd\main.go
+ ~~~
+
 ## Архитектура проекта:
 
 - *root/cmd* - основной `go` файл, в котором я создаю сам сервер (библиотека gin) 
@@ -10,6 +29,12 @@
 - root/pkg:
 	- /calc: содержит сам калькулятор и его тесты
 	- /errors: кастомные ошибки (no usages, lol)
+
+
+### Где находятся тесты?
+
+* Для сервера - `root/internal/test/app_test.go
+* Для калькулятора - `root/pkg/calc/calc_test.go
 
 ___
 
